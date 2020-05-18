@@ -1,32 +1,43 @@
+import { CustomerService } from './../../services/app.order.service';
 import { Component, OnInit } from '@angular/core';
 import { Order } from 'src/app/models/app.model';
-import { Logic } from 'src/app/models/app.logic';
+import { Orders, OrderHeader } from 'src/app/models/app.order';
 
 @Component({
   selector: 'app-order',
-  templateUrl: 'order.component.html',
+  templateUrl: './order.component.html',
 })
 export class OrderComponent implements OnInit {
-  searchText: string;
-  headers: Array<string>;
-  orders: Array<Order>;
-  private logic: Logic;
+  headers = OrderHeader;
+  order: Order;
+  orders = Orders;
+  customerIds: Array<number>;
+  filteredOrders: Array<Order>;
 
-  constructor() {
-    this.orders = new Array<Order>();
-    this.logic = new Logic();
-    this.headers = new Array<string>();
+  constructor(private customerService: CustomerService) {
+    this.filteredOrders = new Array<Order>();
+    this.order = new Order(0, '', '', 0, 0, 0);
+    this.customerIds = [];
   }
 
-  onRowSelectedEvent(r: Order) {
-    // emit() method will emit an event
-    console.log(r.CustomerId);
-  }
   ngOnInit(): void {
-    this.orders = this.logic.getOrders();
-    for (let c in this.orders) {
-      this.headers.push(c);
+    this.customerService.emitValue.subscribe((data) => {
+      this.customerIds = data;
+    });
+  }
+  onRowSelectedEvent(ord: Order): void {
+    console.log(ord);
+  }
+  get filteredOrder(): Array<Order> {
+    console.log(this.filteredOrders);
+    this.filteredOrders = new Array<Order>();
+    if (this.customerIds.length > 0) {
+      this.filteredOrders = this.orders.filter((o) => {
+        return this.customerIds.includes(o.CustomerId);
+      });
+    } else {
+      this.filteredOrders = this.orders;
     }
-    this.headers = this.logic.getOrderHeaders();
+    return this.filteredOrders;
   }
 }

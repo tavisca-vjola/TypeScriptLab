@@ -1,4 +1,5 @@
-import { Service } from './../../services/app.table.service';
+import { CustomerService } from './../../services/app.order.service';
+import { SearchService } from '../../services/app.search.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SearchComponent implements OnInit {
   searchText: string;
-  constructor(private service: Service) {
-    this.service.emitValue = this.searchText;
+  constructor(private service: SearchService) {
+    this.searchText = '';
   }
-  
+  search(): void {
+    console.log(this.searchText);
+    this.service.onSearchValue(this.searchText);
+  }
+
   ngOnInit(): void {}
 }

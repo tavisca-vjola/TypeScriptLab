@@ -6,7 +6,6 @@ import { PipeTransform, Pipe } from '@angular/core';
 })
 export class FilterPipe implements PipeTransform {
   transform(products: Customer[], searchText: string): any[] {
-    console.log(products);
     if (!products) return [];
     if (!searchText) return products;
     searchText = searchText.toLowerCase();

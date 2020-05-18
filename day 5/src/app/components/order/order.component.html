@@ -6,8 +6,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let order of orders" (click)="onRowSelectedEvent(order)">
-                <td *ngFor="let h of headers  ">
+            <tr *ngFor="let order of filteredOrder">
+               <td *ngFor="let h of headers  ">
                     {{order[h]}}
                 </td>
             </tr>
